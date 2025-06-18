@@ -28,10 +28,11 @@
 // }
 
 
-import { pipeline } from "@xenova/transformers";
+import { FeatureExtractionPipeline, pipeline } from "@xenova/transformers";
 import Groq from "groq-sdk";
 
-let embedder: any = null;
+// let embedder: any = null;
+let embedder: FeatureExtractionPipeline | null = null;
 let groq: Groq | null = null;
 
 async function getEmbedder() {

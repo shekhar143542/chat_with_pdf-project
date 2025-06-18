@@ -8,11 +8,12 @@ import { deleteDoc, doc } from "firebase/firestore"; // Firestore delete
 import { ref, deleteObject } from "firebase/storage"; // Firebase Storage delete
 import { db, storage } from "@/firebase"; // Adjust path to your Firebase config
 
+
 const Document = ({
   id,
   name,
   size,
-  downloadUrl,
+  // downloadUrl,
   onDelete, // New prop for UI update
 }: {
   id: string;
