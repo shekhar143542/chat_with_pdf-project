@@ -3,7 +3,7 @@
 import { FormEvent, useEffect, useRef, useState, useTransition } from "react";
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
-import { Loader2Icon } from "lucide-react";
+import { Loader2Icon, BotIcon } from "lucide-react"; // AI icon
 import { useCollection } from "react-firebase-hooks/firestore";
 import { useUser } from "@clerk/nextjs";
 import { collection, orderBy, query } from "firebase/firestore";
@@ -15,6 +15,7 @@ export type Message = {
   role: "human" | "ai" | "placeholder";
   message: string;
   createdAt: Date;
+  loading?: boolean;
 };
 
 function Chat({ id }: { id: string }) {
@@ -40,8 +41,6 @@ function Chat({ id }: { id: string }) {
 
   useEffect(() => {
     if (!snapshot) return;
-
-    console.log("Updated snapshot", snapshot.docs);
 
     const newMessages = snapshot.docs.map((doc) => ({
       id: doc.id,
@@ -70,8 +69,9 @@ function Chat({ id }: { id: string }) {
       {
         id: `ai-placeholder-${Date.now()}`,
         role: "ai",
-        message: "Thinking...",
+        message: "",
         createdAt: new Date(),
+        loading: true, // Show animated effect while generating response
       },
     ]);
 
@@ -96,7 +96,7 @@ function Chat({ id }: { id: string }) {
                   {
                     id: `ai-${Date.now()}`,
                     role: "ai",
-                    message: generatedText + "█", // Cursor effect
+                    message: generatedText + "█", // Typing effect
                     createdAt: new Date(),
                   },
                 ]);
@@ -108,12 +108,12 @@ function Chat({ id }: { id: string }) {
                   {
                     id: `ai-${Date.now()}`,
                     role: "ai",
-                    message: generatedText, // Final message
+                    message: generatedText,
                     createdAt: new Date(),
                   },
                 ]);
               }
-            }, 20); // Speed of the effect
+            }, 20);
             return updatedMessages;
           } else {
             return [
@@ -170,10 +170,18 @@ function Chat({ id }: { id: string }) {
           messages.map((message) => (
             <div
               key={message.id}
-              className={`p-2 my-2 flex ${
+              className={`p-2 my-2 flex items-center gap-2 ${
                 message.role === "human" ? "justify-end" : "justify-start"
               }`}
             >
+              {/* AI Avatar (left side for AI messages) */}
+              {message.role === "ai" && (
+                <div className="w-9 h-9 bg-gray-800 flex justify-center items-center rounded-full shadow-md">
+                  <BotIcon className="text-gray-400 w-6 h-6" />
+                </div>
+              )}
+
+              {/* Message Bubble */}
               <span
                 className={`inline-block px-4 py-2 rounded-lg text-white text-sm shadow-lg ${
                   message.role === "human"
@@ -181,8 +189,25 @@ function Chat({ id }: { id: string }) {
                     : "bg-gray-700"
                 }`}
               >
-                {message.message}
+                {message.loading ? (
+                  <div className="flex space-x-1">
+                    <span className="animate-bounce w-2 h-2 bg-white rounded-full"></span>
+                    <span className="animate-bounce w-2 h-2 bg-white rounded-full delay-200"></span>
+                    <span className="animate-bounce w-2 h-2 bg-white rounded-full delay-400"></span>
+                  </div>
+                ) : (
+                  message.message
+                )}
               </span>
+
+              {/* User Avatar (right side for human messages) */}
+              {message.role === "human" && user?.imageUrl && (
+                <img
+                  src={user.imageUrl}
+                  alt="User Avatar"
+                  className="w-9 h-9 rounded-full object-cover border border-gray-500 shadow-md"
+                />
+              )}
             </div>
           ))
         )}

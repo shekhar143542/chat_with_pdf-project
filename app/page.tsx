@@ -302,7 +302,7 @@ const Home: React.FC = () => {
 
             {/* Copyright */}
             <div className="text-xs md:text-sm">
-              <p>© {new Date().getFullYear()} Chat with PDF. All rights reserved.</p>
+              <p> {new Date().getFullYear()} Chat with PDF. All rights reserved.</p>
             </div>
           </div>
 

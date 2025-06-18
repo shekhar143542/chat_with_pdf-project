@@ -3,13 +3,13 @@ import { getFirestore } from "firebase/firestore";
 import { getStorage } from "firebase/storage";
 
 const firebaseConfig = {
-    apiKey: "AIzaSyCFUj8VzoeshSf6YOfQpDmcv144VrTovrY",
-    authDomain: "chat-with-pdf-f9711.firebaseapp.com",
-    projectId: "chat-with-pdf-f9711",
-    storageBucket: "chat-with-pdf-f9711.firebasestorage.app",
-    messagingSenderId: "222499029004",
-    appId: "1:222499029004:web:c4a2e569de219844126e29",
-    measurementId: "G-P428FYB49P"
+    apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
+    authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN,
+    projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
+    storageBucket: process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET,
+    messagingSenderId: process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID,
+    appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
+    measurementId: process.env.NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID
   };
 
   const app = getApps().length === 0?initializeApp(firebaseConfig):getApp();
